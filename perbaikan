@@ -1,0 +1,47 @@
+import turtle
+import time
+import random
+
+# Setup layar
+screen = turtle.Screen()
+screen.bgcolor("lightblue")
+screen.title("Simulasi Evakuasi Banjir")
+
+# Inisialisasi objek
+flood = turtle.Turtle()
+flood.shape("square")
+flood.color("blue")
+flood.penup()
+
+houses = []
+for _ in range(5):
+    house = turtle.Turtle()
+    house.shape("square")
+    house.color("green")
+    house.penup()
+    house.goto(random.randint(-200, 200), random.randint(-200, 200))
+    houses.append(house)
+
+# Fungsi evakuasi otomatis (dari PR #3)
+def find_path(start, goal):
+    # Implementasi sederhana A* (perlu dikembangkan)
+    path = [start]
+    while path[-1] != goal:
+        # Logika pathfinding dasar
+        next_pos = (path[-1][0] + 10, path[-1][1])  # Contoh gerakan kanan
+        path.append(next_pos)
+        if len(path) > 100:  # Timeout untuk hindari loop
+            break
+    return path
+
+# Loop utama (diperbaiki dari PR #2)
+def animate():
+    flood.forward(5)
+    for house in houses:
+        if flood.distance(house) < 20:  # Perbaikan dari PR #1
+            house.hideturtle()
+            houses.remove(house)  # Hindari IndexError dengan check di atas
+    screen.ontimer(animate, 100)  # Smooth animasi
+
+animate()
+turtle.done()
